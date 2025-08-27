@@ -1,0 +1,6 @@
+com/cworks/stacked/model/Post.class
+com/cworks/stacked/service/UserService.class
+com/cworks/stacked/api/UserController.class
+com/cworks/stacked/repository/UserRepository.class
+com/cworks/stacked/model/User.class
+com/cworks/stacked/StackedApplication.class

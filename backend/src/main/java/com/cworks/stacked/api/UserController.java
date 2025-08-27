@@ -3,6 +3,7 @@ package com.cworks.stacked.api;
 import com.cworks.stacked.service.UserService;
 import com.cworks.stacked.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,8 +23,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable int id){
+    public User getUserById(@PathVariable  int id){
         User user = userService.getUserById(id);
         return user != null ? user : null;
     }
+
+
 }

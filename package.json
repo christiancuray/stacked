@@ -2,8 +2,8 @@
     "name": "stacked",
     "private": true,
     "scripts": {
-        "dev:frontend": "npm --prefix stacked/frontend run dev",
-        "dev:backend": "cd stacked/backend && mvn spring-boot:run",
+        "dev:frontend": "npm --prefix frontend run dev",
+        "dev:backend": "cd backend && mvn spring-boot:run",
         "dev": "npm-run-all -p dev:backend dev:frontend"
     },
     "devDependencies": {

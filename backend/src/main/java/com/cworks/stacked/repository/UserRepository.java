@@ -1,7 +1,6 @@
 
 package com.cworks.stacked.repository;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,7 +18,10 @@ public class UserRepository {
     }
 
     // Add new user
-    public void addUser(@NotNull User user){
+    public void addUser(User user){
+        if (user == null) {
+            throw new IllegalArgumentException("User must not be null");
+        }
         String sql = "INSERT INTO users (" +
                 "username," +
                 "email," +
@@ -50,6 +52,7 @@ public class UserRepository {
                 u.setPassword(rs.getString("password"));
                 u.setDisplayName(rs.getString("display_name"));
                 u.setBio(rs.getString("bio"));
+
                 return u;
             }, id);
         } catch (EmptyResultDataAccessException e) {

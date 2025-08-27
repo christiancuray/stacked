@@ -13,8 +13,16 @@ public class Post {
     private int userId;
     private String title;
     private String body;
-    private  LocalDateTime createdAt;
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public Post(int userId, String title, String body) {
+        this.userId = userId;
+        this.title = title;
+        this.body = body;
+    }
+    public Post() {
+    }
 
     public int getId() {
         return id;
@@ -23,6 +31,7 @@ public class Post {
     public void setId(int id) {
         this.id = id;
     }
+
 
     public int getUserId() {
         return userId;
@@ -61,6 +70,17 @@ public class Post {
         this.updatedAt = updatedAt;
     }
 
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
     @Override
     public String toString() {
         return "post{" +
@@ -71,16 +91,5 @@ public class Post {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 }
