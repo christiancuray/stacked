@@ -37,7 +37,6 @@ public class PostService {
         repoPost.save(post);
     }
 
-
     // get post by id
     public Post getPostById(int id){
         return repoPost.findById(id).orElse(null);
@@ -55,9 +54,10 @@ public class PostService {
     public long countPost(){
         return repoPost.count();
     }
-//    public List<Post> getPostsByUserId(Integer userId){
-//        return repoPost.findByUserId(userId);
-//    }
+
+    // public void addMockData(){
+    //     repoPost.save(Post p = new Post())
+    // }
 
 
 }
