@@ -18,6 +18,17 @@ public class User {
     private String bio;
     private  LocalDateTime dateCreated = LocalDateTime.now();
 
+    public User() {
+    }
+
+    public User(String username, String email, String password, String displayName, String bio) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.displayName = displayName;
+        this.bio = bio;
+    }
+
     public int getId() {
         return id;
     }
