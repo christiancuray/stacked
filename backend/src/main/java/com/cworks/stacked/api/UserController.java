@@ -4,10 +4,16 @@ import com.cworks.stacked.service.UserService;
 import com.cworks.stacked.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:5173")
+
 public class UserController {
 
     private final UserService userService;
@@ -17,15 +23,35 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public void addUser(@RequestBody User user) {
-        userService.addUser(user);
+    @PostMapping("/addUser")
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable  int id){
+    public ResponseEntity<User> getUserById(@PathVariable  int id){
         User user = userService.getUserById(id);
-        return user != null ? user : null;
+        if(user == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<User>> getAllUsers(){
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable int id){
+        userService.deleteUserById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> countUsers(){
+        return new ResponseEntity<>( userService.countUser(), HttpStatus.OK);
     }
 
 

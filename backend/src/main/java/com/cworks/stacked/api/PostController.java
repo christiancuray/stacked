@@ -3,11 +3,17 @@ package com.cworks.stacked.api;
 import com.cworks.stacked.service.PostService;
 import com.cworks.stacked.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/posts")
+@CrossOrigin(origins = "http://localhost:5173")
 public class PostController {
 
     private final PostService postService;
@@ -17,31 +23,34 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PostMapping
-    public void addPost(@RequestBody  Post post) {
-        postService.addPost(post);
-
+    @PostMapping("/addPost")
+    public ResponseEntity<Post> addPost(@RequestBody Post post) {
+        return new ResponseEntity(postService.addPost(post), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public Post getPostById(@PathVariable int id){
+    public ResponseEntity<Post> getPostById(@PathVariable int id){
         Post post = postService.getPostById(id);
-        return post != null ? post : null;
+        if(post == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public java.util.List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    public ResponseEntity<List<Post>> getAllPosts() {
+        return new ResponseEntity<>(postService.getAllPosts(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deletePostById(@PathVariable int id){
+    public ResponseEntity<Void> deletePostById(@PathVariable int id){
         postService.deletePostById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/count")
-    public long countPosts(){
-        return postService.countPost();
+    public ResponseEntity<Long> countPosts(){
+        return new ResponseEntity<>(postService.countPost(), HttpStatus.OK);
     }
 
 
