@@ -48,6 +48,24 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Post> updatePost(@PathVariable int id, @RequestBody Post post){
+        Post p = null;
+        try {
+            p = postService.updatePost(id, post);
+
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if(p == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            return new ResponseEntity<>(p, HttpStatus.OK);
+        }
+
+    }
+
     @GetMapping("/count")
     public ResponseEntity<Long> countPosts(){
         return new ResponseEntity<>(postService.countPost(), HttpStatus.OK);

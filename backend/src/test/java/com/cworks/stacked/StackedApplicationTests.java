@@ -8,6 +8,7 @@ class StackedApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

@@ -37,4 +37,14 @@ public class PostService {
     }
 
 
+    public Post updatePost(int id, Post post) {
+        Post existingPost = repoPost.findById(id).orElse(null);
+        if (existingPost == null) {
+            return null;
+        }
+        existingPost.setTitle(post.getTitle());
+        existingPost.setBody(post.getBody());
+        existingPost.setUserId(post.getUserId());
+        return repoPost.save(existingPost);
+    }
 }
