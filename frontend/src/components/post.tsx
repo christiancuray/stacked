@@ -1,3 +1,6 @@
+import React from "react";
+import { Button } from "./ui/button";
+import UpdatePost from "./UpdatePost";
 import {
   Card,
   CardAction,
@@ -16,6 +19,7 @@ interface PostProps {
 }
 
 export function Post({ userName, title, body, createdAt }: PostProps) {
+  const [isLiked, setIsLikes] = React.useState(false);
   // Format the timestamp for display
   const formatTimeAgo = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -36,11 +40,26 @@ export function Post({ userName, title, body, createdAt }: PostProps) {
     return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
   };
 
+  function handleLike() {
+    setIsLikes(!isLiked);
+  }
+
+  // function handleEditPost() {
+  //    return <UpdatePost val=(pr) />;
+
+  // }
+
   return (
     <Card className="w-full max-w-md shadow-md hover:shadow-xl transition-shadow duration-200">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold text-gray-900">
           {userName}
+          <Button
+            // onClick={handleEditPost}
+            className="py-2 px-4 m"
+          >
+            Edit
+          </Button>
         </CardTitle>
         <CardDescription className="text-sm text-gray-500">
           {formatTimeAgo(createdAt)}
@@ -53,9 +72,16 @@ export function Post({ userName, title, body, createdAt }: PostProps) {
       </CardContent>
 
       <CardFooter className="pt-0 flex gap-4 w-full">
-        <CardAction className="flex-1 text-center py-2 px-3 rounded-md hover:bg-gray-100 transition-colors duration-150">
-          Like
-        </CardAction>
+        <Button
+          className={
+            isLiked
+              ? "flex-1 text-center py-2 px-3 rounded-md bg-blue-500"
+              : "flex-1 text-center py-2 px-3 rounded-md bg-white text-black"
+          }
+          onClick={handleLike}
+        >
+          {isLiked ? "Unlike" : "Like"}
+        </Button>
         <CardAction className="flex-1 text-center py-2 px-3 rounded-md hover:bg-gray-100 transition-colors duration-150">
           Comment
         </CardAction>

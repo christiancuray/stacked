@@ -1,33 +1,22 @@
-import { HomePage } from "./components/HomePage";
-import Layout from "./components/layout";
+import PostPage from "./components/PostPage";
+import Layout from "./layout/Layout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { PostsList } from "./components/posts-list";
+import { HomePage } from "./pages/HomePage";
+import { Login } from "./pages/LoginPage";
 
 function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/posts" element={<PostsList />} />
-          <Route
-            path="/profile"
-            element={
-              <div className="p-4">
-                <h1>Profile Page</h1>
-              </div>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <div className="p-4">
-                <h1>Settings Page</h1>
-              </div>
-            }
-          />
-        </Routes>
-      </Layout>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="/posts" element={<PostPage />} />
+          <Route path="/profile" element={<div>Profile Page</div>} />
+          <Route path="/settings" element={<div>Settings Page</div>} />
+          <Route path="*" element={<div>Page Not Found</div>} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

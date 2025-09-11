@@ -1,10 +1,11 @@
 /Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/StackedApplication.java
+/Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/api/LoginController.java
 /Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/api/PostController.java
 /Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/api/UserController.java
+/Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/config/CorsConfig.java
 /Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/model/Post.java
 /Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/model/User.java
-/Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/repository/PostRepository.java
 /Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/repository/RepoPost.java
-/Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/repository/UserRepository.java
+/Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/repository/RepoUser.java
 /Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/service/PostService.java
 /Users/christian/Documents/Projects/Stacked/backend/src/main/java/com/cworks/stacked/service/UserService.java
