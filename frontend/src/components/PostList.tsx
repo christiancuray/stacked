@@ -3,20 +3,14 @@ import axios from "axios";
 import { Post } from "./Post";
 import AddPost from "./AddPostPage";
 
-interface PostData {
-  id: number;
-  userId: number;
-  title: string;
-  body: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import type PostData from "../interface/PostData";
+import type UserData from "../interface/UserData";
 
 export function PostList() {
   const [posts, setPosts] = useState<PostData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUsers] = useState<UserData[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [users, setUsers] = useState<{ [key: number]: string }>({});
   const [query, setQuery] = useState("");
 
   useEffect(() => {
@@ -32,12 +26,13 @@ export function PostList() {
         p.body.toLowerCase().includes(query.toLowerCase())
     );
   };
+
   const fPost = filteredPosts(query);
 
   const fetchUser = async (userId: number): Promise<string> => {
     try {
       const res = await axios.get(`/api/users/${userId}`);
-      return res.data.displayName || `User ${userId}`;
+      return res.data ? res.data : `User ${userId} information not found`;
     } catch (err) {
       console.error(`Error fetching user ${userId}:`, err);
       return `User ${userId}`;
@@ -48,19 +43,13 @@ export function PostList() {
     try {
       setLoading(true);
       // fetch all posts
-      const response = await axios.get("/api/posts/all");
-      const postsData = response.data;
+      const respost = await axios.get("/api/posts/all");
+      const postsData = respost.data;
       setPosts(postsData);
 
-      // Fetch user names for all posts
-      const userNames: { [key: number]: string } = {};
-      for (const post of postsData) {
-        if (!userNames[post.userId]) {
-          // set the username for the userId if not already fetched
-          userNames[post.userId] = await fetchUser(post.userId);
-        }
-      }
-      setUsers(userNames);
+      const resUser = await axios.get("/api/users/all");
+      const userData = resUser.data;
+      setUsers(userData);
 
       setError(null);
     } catch (err) {
@@ -128,13 +117,7 @@ export function PostList() {
 
       <div className="flex flex-col items-center gap-6">
         {fPost.map((post) => (
-          <Post
-            key={post.id}
-            userName={users[post.userId] || `User ${post.userId}`}
-            title={post.title}
-            body={post.body}
-            createdAt={post.createdAt}
-          />
+          <Post key={post.id} post={post} userName={"Mike"} />
         ))}
       </div>
     </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "./ui/button";
-import UpdatePost from "./UpdatePost";
+
+import type { PostComponentProps } from "../interface/PostComponentProps";
 import {
   Card,
   CardAction,
@@ -10,16 +11,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import UpdatePost from "./UpdatePost";
+import type PostData from "../interface/PostData";
 
-interface PostProps {
-  userName: string;
-  title: string;
-  body: string;
-  createdAt: string;
-}
-
-export function Post({ userName, title, body, createdAt }: PostProps) {
+export function Post({ post, userName }: PostComponentProps) {
   const [isLiked, setIsLikes] = React.useState(false);
+  // const [isEditing, setIsEditing] = React.useState(false);
+  const [title, setTitle] = React.useState(post.title);
+  const [body, setBody] = React.useState(post.body);
+
   // Format the timestamp for display
   const formatTimeAgo = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -44,25 +44,32 @@ export function Post({ userName, title, body, createdAt }: PostProps) {
     setIsLikes(!isLiked);
   }
 
-  // function handleEditPost() {
-  //    return <UpdatePost val=(pr) />;
+  function handPostUpdate(updatedPost: PostData) {
+    // setIsEditing(true);
+    // For simplicity, we'll just prompt for new title and body
+    // const newTitle = prompt("Edit Title", title);
+    // const newBody = prompt("Edit Body", body);
 
-  // }
+    // if (newTitle !== null) setTitle(newTitle);
+    // if (newBody !== null) setBody(newBody);
+    // i want to use the modal from AddPostPage here instead of prompt
+    // <AddPost onPostAdded={() => {}} />;
+    setTitle(updatedPost.title);
+    setBody(updatedPost.body);
+    // setIsEditing(false);
+  }
 
   return (
     <Card className="w-full max-w-md shadow-md hover:shadow-xl transition-shadow duration-200">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-gray-900">
+        <CardTitle className=" flex justify-between text-lg font-semibold text-gray-900">
           {userName}
-          <Button
-            // onClick={handleEditPost}
-            className="py-2 px-4 m"
-          >
-            Edit
-          </Button>
+          <UpdatePost post={post} onPostUpdated={handPostUpdate}>
+            <Button className="py-2 px-4 m">Edit</Button>
+          </UpdatePost>
         </CardTitle>
         <CardDescription className="text-sm text-gray-500">
-          {formatTimeAgo(createdAt)}
+          {formatTimeAgo(post.createdAt)}
         </CardDescription>
       </CardHeader>
 
