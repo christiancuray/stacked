@@ -49,6 +49,21 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user){
+        User u = null;
+        try {
+            u = userService.updateUser(id, user);
+
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if(u == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(u, HttpStatus.OK);
+    }
+
     @GetMapping("/count")
     public ResponseEntity<Long> countUsers(){
         return new ResponseEntity<>( userService.countUser(), HttpStatus.OK);
