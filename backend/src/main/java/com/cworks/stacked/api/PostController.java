@@ -48,7 +48,7 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Post> updatePost(@PathVariable int id, @RequestBody Post post){
         Post p = null;
         try {
