@@ -2,6 +2,7 @@ import React from "react";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { UpdatePostForm } from "./UpdatePostForm";
 import type PostData from "../interface/PostData";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 interface UpdatePostProps {
   post: PostData;
@@ -21,6 +22,7 @@ export default function UpdatePost({
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent className="sm:max-w-lg">
+        <DialogTitle className="text-lg font-medium" />
         <UpdatePostForm
           post={post}
           onPostUpdated={onPostUpdated}

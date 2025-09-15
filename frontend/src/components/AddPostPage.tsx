@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { AddPostForm } from "./AddPostForm";
 import React from "react";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "./ui/dialog";
 
 export default function AddPost({ onPostAdded }: { onPostAdded?: () => void }) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -13,6 +13,8 @@ export default function AddPost({ onPostAdded }: { onPostAdded?: () => void }) {
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-lg">
+        <DialogTitle className="text-lg font-medium" />
+
         <AddPostForm
           closeModal={() => setIsOpen(false)}
           onPostAdded={onPostAdded}
