@@ -1,4 +1,4 @@
-import type PostData from "./PostData";
+import type PostData from "../types/PostData";
 export interface PostComponentProps {
   post: PostData;
   userName: string;

@@ -5,4 +5,8 @@ export default interface PostData {
   body: string;
   createdAt: string;
   updatedAt: string;
+  user?: {
+    id: number;
+    username: string;
+  };
 }
