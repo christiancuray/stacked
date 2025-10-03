@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // define the schema and validation
 const formSchema = z
@@ -31,6 +32,7 @@ const formSchema = z
   });
 
 export function SignupForm() {
+  const navigate = useNavigate();
   // initialize the form to default values and validation schema
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,19 +46,26 @@ export function SignupForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // remove the confirmPasword field before sending to backend
-    const { confirmPassword, ...userData } = values;
+    const userData = {
+      username: values.username,
+      email: values.email,
+      password: values.password,
+    };
     try {
-      const res = await axios.post("/api/users/addUser", userData);
+      const res = await axios.post("/api/auth/register", userData);
 
       console.log("Response data:", res.data);
 
       const user = await res.data;
       console.log("signup successful:", user);
       form.reset();
-      if (user) window.location.href = "/login";
-    } catch (err: any) {
-      if (err.response) {
-        alert(err.response.data.message || "Signup failed. Please try again.");
+      if (user) {
+        // Redirect to login page after successful signup
+        navigate("/login");
+      }
+    } catch (err: Error | unknown) {
+      if (err instanceof Error) {
+        alert(err.message || "Signup failed. Please try again.");
       } else {
         alert("An unexpected error occurred.");
       }

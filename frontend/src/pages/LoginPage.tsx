@@ -1,80 +1,100 @@
 import { Button } from "@/components/ui/button";
+
 import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
-// const handleLogin(){
+const formSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+});
 
-// }
+export function LoginForm() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
 
-// const handleLoginGoogle(){}
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      console.log("Logging in with", values);
+      // send login request to backend
+      const res = await axios.post("/api/auth/login", values);
 
-export function Login() {
+      const authResponse = await res.data;
+      if (authResponse && authResponse.token) {
+        // Store user authentication data
+        login(authResponse.username, authResponse.token);
+        // redirect to feed homepage
+        navigate("/");
+      } else {
+        alert("Login failed. Please try again.");
+        return;
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("Login failed. Please try again.");
+      return;
+    }
+  }
+
   return (
-    <div className="">
-      <div className="min-h-dvh flex items-center justify-center p-4">
-        <Card className="full-w max-w-sm  ">
-          <CardHeader>
-            <CardTitle>Login to your account</CardTitle>
-            <CardDescription>
-              Enter your email below to login to your account
-            </CardDescription>
-            <CardAction>
-              <Button variant="link">Sign Up</Button>
-            </CardAction>
-          </CardHeader>
-          <CardContent>
-            <form>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
-                    required
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Password</Label>
-                    <a
-                      href="#"
-                      className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                    >
-                      Forgot your password?
-                    </a>
-                  </div>
-                  <Input id="password" type="password" required />
-                </div>
-              </div>
-            </form>
-          </CardContent>
-          <CardFooter className="flex-col gap-2">
-            <Button
-              // onClick={handleLogin}
-              type="submit"
-              className="w-full"
-            >
+    <div className="min-h-dvh flex items-center justify-center p-4">
+      <div className="w-full max-w-sm">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Username" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Password" type="password" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-full">
               Login
             </Button>
             <Button
-              // onClick={handleLoginGoogle}
               variant="outline"
               className="w-full"
+              onClick={() => (window.location.href = "/signup")}
             >
-              Login with Google
+              Sign up
             </Button>
-          </CardFooter>
-        </Card>
+          </form>
+        </Form>
       </div>
     </div>
   );
