@@ -15,7 +15,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import type PostData from "../interface/PostData";
+import type PostData from "../types/PostData";
+import axios from "axios";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required").max(50, "Title is too long"),
@@ -46,20 +47,9 @@ export function UpdatePostForm({
 
     try {
       // Assuming an endpoint like /api/posts/:id for updates
-      const res = await fetch(`/api/posts/${post.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
+      const res = await axios.put(`/api/posts/${post.id}`, values);
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(
-          errorData.message || `HTTP error! status: ${res.status}`
-        );
-      }
-
-      const updatedPost = await res.json();
+      const updatedPost = await res.data;
       console.log("Post updated successfully:", updatedPost);
 
       onPostUpdated(updatedPost);

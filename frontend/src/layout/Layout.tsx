@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -15,8 +15,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { Home, User, FileText, Settings } from "lucide-react";
+import { Home, User, FileText, Settings, LogOut } from "lucide-react";
 import { useOutlet, Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -24,7 +25,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
+  const { user, logout } = useAuth();
   const outlet = useOutlet();
 
   const navigationItems = [
@@ -85,16 +86,29 @@ export default function Layout({ children }: LayoutProps) {
         </SidebarContent>
 
         <SidebarFooter className="border-t px-4 py-3">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
-              <User className="h-4 w-4" />
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 flex-1">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
+                <User className="h-4 w-4" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">
+                  {user?.username || "User"}
+                </span>
+                <span className="truncate text-xs text-muted-foreground">
+                  Online
+                </span>
+              </div>
             </div>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">John Doe</span>
-              <span className="truncate text-xs text-muted-foreground">
-                john@example.com
-              </span>
-            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={logout}
+              className="h-8 w-8 p-0"
+              title="Logout"
+            >
+              <LogOut className="h-4 w-4" />
+            </Button>
           </div>
         </SidebarFooter>
       </Sidebar>

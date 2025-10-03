@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { UpdatePostForm } from "./UpdatePostForm";
-import type PostData from "../interface/PostData";
+import type PostData from "../types/PostData";
 import { DialogTitle } from "@radix-ui/react-dialog";
 
 interface UpdatePostProps {

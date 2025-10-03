@@ -1,25 +1,29 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Post } from "./Post";
-import AddPost from "./AddPostPage";
-
-import type PostData from "../interface/PostData";
-import type UserData from "../interface/UserData";
+import AddPost from "../pages/AddPostPage";
+import type PostData from "../types/PostData";
+import { useAuth } from "../hooks/useAuth";
 
 export function PostList() {
+  const { isAuthenticated } = useAuth();
   const [posts, setPosts] = useState<PostData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUsers] = useState<UserData[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    console.log("PostsList useEffect triggered - fetching posts");
-    fetchPosts();
-  }, []);
+    // Only fetch posts if user is authenticated
+    if (isAuthenticated) {
+      console.log("PostsList useEffect triggered - fetching posts");
+      fetchPosts();
+    } else {
+      setLoading(false);
+    }
+  }, [isAuthenticated]);
 
   // function to filter posts based on search query
-  const filteredPosts = (query: String) => {
+  const filteredPosts = (query: string) => {
     return posts.filter(
       (p) =>
         p.title.toLowerCase().includes(query.toLowerCase()) ||
@@ -27,17 +31,8 @@ export function PostList() {
     );
   };
 
+  // filtered posts
   const fPost = filteredPosts(query);
-
-  const fetchUser = async (userId: number): Promise<string> => {
-    try {
-      const res = await axios.get(`/api/users/${userId}`);
-      return res.data ? res.data : `User ${userId} information not found`;
-    } catch (err) {
-      console.error(`Error fetching user ${userId}:`, err);
-      return `User ${userId}`;
-    }
-  };
 
   const fetchPosts = async () => {
     try {
@@ -47,10 +42,6 @@ export function PostList() {
       const postsData = respost.data;
       setPosts(postsData);
 
-      const resUser = await axios.get("/api/users/all");
-      const userData = resUser.data;
-      setUsers(userData);
-
       setError(null);
     } catch (err) {
       setError("Failed to fetch posts. Make sure your backend is running.");
@@ -59,6 +50,11 @@ export function PostList() {
       setLoading(false);
     }
   };
+
+  // Early return if not authenticated - this prevents any rendering or API calls
+  if (!isAuthenticated) {
+    return null;
+  }
 
   if (loading) {
     return (
@@ -117,7 +113,11 @@ export function PostList() {
 
       <div className="flex flex-col items-center gap-6">
         {fPost.map((post) => (
-          <Post key={post.id} post={post} userName={"Mike"} />
+          <Post
+            key={post.id}
+            post={post}
+            userName={post.user?.username || "Unknown"}
+          />
         ))}
       </div>
     </div>

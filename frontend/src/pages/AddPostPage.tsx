@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { AddPostForm } from "./AddPostForm";
+import { AddPostForm } from "../components/AddPostForm";
 import React from "react";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "./ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "../components/ui/dialog";
 
 export default function AddPost({ onPostAdded }: { onPostAdded?: () => void }) {
   const [isOpen, setIsOpen] = React.useState(false);

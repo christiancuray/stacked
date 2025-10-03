@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required").max(50, "Title is too long"),
@@ -40,20 +41,20 @@ export function AddPostForm({
     console.log("submitting post", values);
 
     try {
-      const res = await fetch("/api/posts/addPost", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...values, userId: 1 }), // hardcoded userID for testing
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(
-          errorData.message || `HTTP error! status: ${res.status}`
-        );
+      // Check if user is authenticated before making request
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) {
+        alert("You must be logged in to create a post");
+        return;
       }
 
-      const newPost = await res.json();
+      console.log("Making API request to /api/posts/addPost");
+      const res = await axios.post("/api/posts/addPost", {
+        title: values.title,
+        body: values.body,
+      });
+
+      const newPost = await res.data;
       console.log("Post created successfully:", newPost);
 
       form.reset();
@@ -63,9 +64,9 @@ export function AddPostForm({
       if (onPostAdded) {
         onPostAdded();
       }
-    } catch (e: unknown) {
-      console.error("Error creating post:", e);
-      alert((e as Error).message || "Something went wrong");
+    } catch (error: unknown) {
+      console.error("Error creating post:", error);
+      alert((error as Error).message || "Something went wrong");
     }
   }
 
