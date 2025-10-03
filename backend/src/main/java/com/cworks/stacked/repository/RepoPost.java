@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface RepoPost extends JpaRepository<Post, Integer> {
-//    @Query
-//    List<Post> findPostByWordInTitle(String title);
+    @Query("SELECT p FROM Post p LEFT JOIN FETCH p.user ORDER BY p.createdAt DESC")
+    List<Post> findAllWithUser();
 }

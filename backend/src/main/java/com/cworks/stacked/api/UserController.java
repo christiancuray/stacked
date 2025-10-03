@@ -1,9 +1,11 @@
 package com.cworks.stacked.api;
 
-import com.cworks.stacked.service.UserService;
+import com.cworks.stacked.dto.RegisterRequest;
+import com.cworks.stacked.dto.AuthenticationResponse;
 import com.cworks.stacked.model.User;
+import com.cworks.stacked.service.UserService;
+//import com.cworks.stacked.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +26,9 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
+    public ResponseEntity<AuthenticationResponse> addUser(@RequestBody RegisterRequest user) {
+        AuthenticationResponse createdUser = userService.addUser(user);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

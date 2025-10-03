@@ -6,16 +6,12 @@ public class PostDTO {
     private int postId;
     private String title;
     private String body;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     public PostDTO() {}
     public PostDTO(int postId, String title, String body, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.postId = postId;
         this.title = title;
         this.body = body;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public int getPostId() {
@@ -42,19 +38,4 @@ public class PostDTO {
         this.body = body;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

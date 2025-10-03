@@ -1,5 +1,6 @@
 package com.cworks.stacked.api;
 
+import com.cworks.stacked.dto.PostDTO;
 import com.cworks.stacked.service.PostService;
 import com.cworks.stacked.model.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,18 @@ public class PostController {
     }
 
     @PostMapping("/addPost")
-    public ResponseEntity<Post> addPost(@RequestBody Post post) {
-        return new ResponseEntity(postService.addPost(post), HttpStatus.CREATED);
+    public ResponseEntity<PostDTO> addPost(@RequestBody PostDTO postDTO) {
+        try {
+            if(postDTO.getTitle() != null && postDTO.getBody() != null && 
+               !postDTO.getTitle().trim().isEmpty() && !postDTO.getBody().trim().isEmpty()) {
+                PostDTO createdPost = postService.addPost(postDTO);
+                return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")

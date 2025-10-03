@@ -2,8 +2,8 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
-    username: admin
-    password: august16
+    username: sa
+    password:
   h2:
     console:
       enabled: true
@@ -28,4 +28,7 @@ server:
 #         allowed-methods: "*"
 #         allowed-headers: "*"
 
-app.jwt.secret: "rLeV0qwZhsPlQgIxQYFE69O6WP0ZTCmRzcTNSTq17vUB6OWWjvHVJ1M9m2fimNq0dyNpW9jnjQIFyuckF6orFoYNLLe7XYNYDuXZybEJ17RlHspdOpd2Owp5rrduX1Izy66xgX3PHPONInSzP4MLt3YHUbQL4P0sr5S79bpX4CVvmuV7SmvRsoTLaLxIKGdwB5ja4cYjjMocBF8cg62vezy8jZ6yEh2Y7FzU3FXEneUQ24D6LXqHMS7nw0bPGRI1"
+security:
+  jwt:
+    secret: "b3JnYW5pemVkaW5mb3JtYXRpb25zYWRtYXJrZXRpbmRpdmlkdWFsZGlubmVybWVhc3U="
+    expiration: 3600000 # 1 hour in milliseconds
