@@ -25,14 +25,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
+        
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
             String username = jwtUtil.getUsernameFromToken(token);
+            
             if (username != null && jwtUtil.validateToken(token)) {
                 Authentication auth = new UsernamePasswordAuthenticationToken(username, null, jwtUtil.getAuthorities(token));
                 SecurityContextHolder.getContext().setAuthentication(auth);
-            }else {
+            } else {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+                return;
+            }
+        } else {
+            // For protected endpoints, require authentication
+            if (!request.getRequestURI().contains("/auth/")) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authorization header required");
                 return;
             }
         }
